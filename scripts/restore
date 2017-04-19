@@ -87,8 +87,8 @@ sudo ln -s "/var/log/${app}/production.log" "${final_path}/log/production.log"
 
 # Reload lufi service
 sudo systemctl daemon-reload
-sudo systemctl start lufi.service
-sudo systemctl enable lufi.service
+sudo systemctl start $app.service
+sudo systemctl enable $app.service
 
 # Set ssowat config
 if [ "$is_public" = "No" ];

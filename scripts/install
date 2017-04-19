@@ -66,27 +66,27 @@ then
 fi
 
 ## Copy and fix variable into lufi config
-sudo cp ../conf/lufi.conf.template "${final_path}/lufi.conf"
-sudo sed -i "s@__DOMAIN__@$domain@g" "${final_path}/lufi.conf"
-sudo sed -i "s@__PATH__@$path@g" "${final_path}/lufi.conf"
-sudo sed -i "s@__PORT__@$port@g" "${final_path}/lufi.conf"
+sudo cp ../conf/lufi.conf.template "${final_path}/${app}.conf"
+sudo sed -i "s@__DOMAIN__@$domain@g" "${final_path}/${app}.conf"
+sudo sed -i "s@__PATH__@$path@g" "${final_path}/${app}.conf"
+sudo sed -i "s@__PORT__@$port@g" "${final_path}/${app}.conf"
 
 secret=$(ynh_string_random 24)
 CHECK_VAR "$secret" "secret empty"
-sudo sed -i "s@__SECRET__@$secret@g" "${final_path}/lufi.conf"
-STORE_MD5_CONFIG "lufi.conf" "${final_path}/lufi.conf"
+sudo sed -i "s@__SECRET__@$secret@g" "${final_path}/${app}.conf"
+STORE_MD5_CONFIG "lufi.conf" "${final_path}/${app}.conf"
 
 # Install systemd script
-sudo cp ../conf/lufi.service /etc/systemd/system/lufi.service
-sudo chown root: /etc/systemd/system/lufi.service
-sudo sed -i "s@__FINALPATH__@$final_path/@g" /etc/systemd/system/lufi.service
+sudo cp ../conf/lufi.service "/etc/systemd/system/${app}.service"
+sudo chown root: "/etc/systemd/system/${app}.service"
+sudo sed -i "s@__FINALPATH__@$final_path/@g" "/etc/systemd/system/${app}.service"
 ## Start service auto
-sudo systemctl enable lufi.service
+sudo systemctl enable $app.service
 
 ## Install cron
-sudo cp ../conf/cron_lufi /etc/cron.d/$app
+sudo cp ../conf/cron_$app /etc/cron.d/$app
 sudo sed -i "s@__FINALPATH__@$final_path/@g" /etc/cron.d/$app
-sudo chmod +x $final_path/script/lufi
+sudo chmod +x $final_path/script/$app
 
 # Install logrotate
 sed -i "s@__FINALPATH__@$final_path@g" ../conf/logrotate
@@ -98,7 +98,7 @@ echo yes | sudo cpan Carton
 # Install lufi via carton
 sudo mkdir -p /var/log/$app/
 cd $final_path
-sudo carton install 2>&1 | sudo tee -a "/var/log/$app/setup_carton.log"
+sudo carton install 2>&1 | sudo tee -a "/var/log/${app}/setup_carton.log"
 
 # Change variables in nginx configuration
 sudo sed -i "s@__PATH__@$path@g" /etc/nginx/conf.d/$domain.d/$app.conf
@@ -124,14 +124,14 @@ sudo chown -R www-data: $final_path
 
 # Start lufi
 sudo systemctl daemon-reload
-sudo systemctl start lufi.service
-sudo systemctl enable lufi.service
+sudo systemctl start $app.service
+sudo systemctl enable $app.service
 
 # Set right permissions on new files created at first start
 sudo chown -R www-data: "$final_path"
 
 # Add lufi as a service
-sudo yunohost service add lufi -l $final_path/log/production.log
+sudo yunohost service add $app -l $final_path/log/production.log
 
 if [ "$is_public" = "No" ];
 then

@@ -12,18 +12,18 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get $app domain)
 
 # Stop lufi service
-if [ -e "/etc/systemd/system/lufi.service" ]; then
+if [ -e "/etc/systemd/system/${app}.service" ]; then
 	echo "Delete systemd script"
-	sudo service lufi stop
-	sudo rm "/etc/systemd/system/lufi.service"
-	sudo systemctl disable lufi.service
+	sudo service $app stop
+	sudo rm "/etc/systemd/system/${app}.service"
+	sudo systemctl disable $app.service
 fi
 
 # Remove monitoring service Yunohost.
-if sudo yunohost service status | grep -q lufi	# Test l'existence du service dans Yunohost
+if sudo yunohost service status | grep -q $app	# Test l'existence du service dans Yunohost
 then
 	echo "Remove lufi service"
-	sudo yunohost service remove lufi
+	sudo yunohost service remove $app
 fi
 
 SECURE_REMOVE '/var/www/$app'	# Delete directory application

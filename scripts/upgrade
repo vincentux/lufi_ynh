@@ -80,13 +80,13 @@ fi
 #=================================================
 
 ## Copie et configuration du fichier de conf.
-CHECK_MD5_CONFIG "lufi.conf" "$final_path/lufi.conf"	# Créé un backup du fichier de config si il a été modifié.
-sudo cp ../conf/lufi.conf.template "$final_path/lufi.conf"
-sudo sed -i "s@__DOMAIN__@$domain@g" "$final_path/lufi.conf"
-sudo sed -i "s@__PATH__@$path@g" "$final_path/lufi.conf"
-sudo sed -i "s@__PORT__@$port@g" "$final_path/lufi.conf"
-sudo sed -i "s@__SECRET__@$secret@g" "${final_path}/lufi.conf"
-STORE_MD5_CONFIG "lufi.conf" "$final_path/lufi.conf"	# Réenregistre la somme de contrôle du fichier de config
+CHECK_MD5_CONFIG "lufi.conf" "$final_path/${app}.conf"	# Créé un backup du fichier de config si il a été modifié.
+sudo cp ../conf/lufi.conf.template "$final_path/${app}.conf"
+sudo sed -i "s@__DOMAIN__@$domain@g" "$final_path/${app}.conf"
+sudo sed -i "s@__PATH__@$path@g" "$final_path/${app}.conf"
+sudo sed -i "s@__PORT__@$port@g" "$final_path/${app}.conf"
+sudo sed -i "s@__SECRET__@$secret@g" "${final_path}/${app}.conf"
+STORE_MD5_CONFIG "lufi.conf" "$final_path/${app}.conf"	# Réenregistre la somme de contrôle du fichier de config
 
 #=================================================
 # SETUP SYSTEMD
@@ -126,7 +126,7 @@ sudo chown -R $app: $final_path
 # RESTART LUFI
 #=================================================
 
-sudo systemctl restart lufi
+sudo systemctl restart ${app}
 
 #=================================================
 # SETUP SSOWAT
