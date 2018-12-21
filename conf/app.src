@@ -1,0 +1,6 @@
+SOURCE_URL=https://framagit.org/fiat-tux/hat-softwares/lufi/-/archive/2ac16f9f11f599f4ebc581e176786b3a5be432d5/lufi-2ac16f9f11f599f4ebc581e176786b3a5be432d5.tar.gz
+SOURCE_SUM=006c3f47f4d25dcc37bf33da0c807d40f017b98eff4c7d3c005fea260de7ad08
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=zip
+SOURCE_IN_SUBDIR=true
+SOURCE_FILENAME=
